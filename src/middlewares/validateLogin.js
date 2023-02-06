@@ -1,6 +1,6 @@
 const validateLogin = (req, res, next) => {
     const { email, password } = req.body;
-    const regex = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i;
+    const regex = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i; // fonte: https://www.regular-expressions.info/email.html
     if (!email) {
         return res.status(400).json({ message: 'O campo "email" é obrigatório' });
     }

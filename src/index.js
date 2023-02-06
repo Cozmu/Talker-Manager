@@ -1,5 +1,5 @@
 const express = require('express');
-const talkerRouter = require('./routers/tolkerRouter');
+const talkerRouter = require('./routers/talkerRouter');
 const loginRouter = require('./routers/loginRouter');
 
 const app = express();
