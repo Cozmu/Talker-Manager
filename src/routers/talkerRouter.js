@@ -37,8 +37,8 @@ async (req, res) => {
     const pessoaCadastrada = req.body;
     const result = await talker.getAllTalker();
     pessoaCadastrada.id = result[result.length - 1].id + 1;
-    console.log([pessoaCadastrada]);
-    return res.status(201).json([pessoaCadastrada]);
+    console.log(pessoaCadastrada);
+    return res.status(201).json(pessoaCadastrada);
 });
 
 module.exports = router;
