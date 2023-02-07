@@ -71,7 +71,6 @@ async (req, res) => {
     const { id } = req.params;
     const result = await talker.getAllTalker();
     const request = result.find((e) => e.id === +id);
-    console.log(request);
     const index = result.indexOf(request);
     const IDNumber = +id;
     const update = { id: IDNumber, ...req.body };
