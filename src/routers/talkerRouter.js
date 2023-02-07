@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs').promises;
+const path = require('path');
 const validateAge = require('../middlewares/validateAge');
 const validateName = require('../middlewares/validateName');
 const validateRate = require('../middlewares/validateRate');
@@ -29,16 +31,36 @@ router.get('/:id', async (req, res) => {
 router.post('/', 
     validateToken,
     validateName,
+    validateTalk,
     validateRate,
     validateAge,
-    validateTalk,
     validateWatchedAt,
 async (req, res) => {
     const pessoaCadastrada = req.body;
     const result = await talker.getAllTalker();
     pessoaCadastrada.id = result[result.length - 1].id + 1;
-    console.log(pessoaCadastrada);
+    result.push(pessoaCadastrada);
+    await fs.writeFile(path.resolve(__dirname, '..', 'talker.json'), JSON.stringify(result));
     return res.status(201).json(pessoaCadastrada);
+});
+
+router.put('/:id', 
+    validateToken,
+    validateName,
+    validateTalk,
+    validateRate,
+    validateAge,
+    validateWatchedAt,
+async (req, res) => {
+    const { id } = req.params;
+    const result = await talker.getAllTalker();
+    const request = result.find((e) => e.id === +id);
+    const index = result.indexOf(request);
+    const IDNumber = +id;
+    const update = { id: IDNumber, ...req.body };
+    result.splice(index, 1, update);
+    await fs.writeFile(path.resolve(__dirname, '..', 'talker.json'), JSON.stringify(result));
+    return res.status(200).json(update);
 });
 
 module.exports = router;
