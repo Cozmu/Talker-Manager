@@ -55,12 +55,23 @@ async (req, res) => {
     const { id } = req.params;
     const result = await talker.getAllTalker();
     const request = result.find((e) => e.id === +id);
+    // console.log(request);
     const index = result.indexOf(request);
     const IDNumber = +id;
     const update = { id: IDNumber, ...req.body };
     result.splice(index, 1, update);
     await fs.writeFile(path.resolve(__dirname, '..', 'talker.json'), JSON.stringify(result));
     return res.status(200).json(update);
+});
+
+router.delete('/:id', 
+    validateToken,
+async (req, res) => {
+    const { id } = req.params;
+    const request = await talker.getAllTalker();
+    const result = request.filter((e) => e.id !== +id);
+    await fs.writeFile(path.resolve(__dirname, '..', 'talker.json'), JSON.stringify(result));
+    res.status(204).send();
 });
 
 module.exports = router;
