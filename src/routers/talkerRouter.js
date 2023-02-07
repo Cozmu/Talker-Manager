@@ -19,6 +19,22 @@ router.get('/', async (req, res) => {
     return res.status(200).json([]);
 });
 
+router.get('/search', 
+    validateToken,
+async (req, res) => {
+    const { q } = req.query;
+    const request = await talker.getAllTalker();
+    const response = request
+        .filter((e) => e.name.toLowerCase().includes(q.toLowerCase()));
+    if (response.length === 0) {
+        return res.status(200).json([]);
+    }
+    if (!q || q === '') {
+        return res.status(200).json(request);
+    }
+    return res.status(200).json(response);
+});
+
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     const result = await talker.getTalkerID(+id);
@@ -55,7 +71,7 @@ async (req, res) => {
     const { id } = req.params;
     const result = await talker.getAllTalker();
     const request = result.find((e) => e.id === +id);
-    // console.log(request);
+    console.log(request);
     const index = result.indexOf(request);
     const IDNumber = +id;
     const update = { id: IDNumber, ...req.body };
